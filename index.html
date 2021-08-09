@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>hi</title>
+	<style type="text/css">
+		body {
+			margin: 0px;
+			overflow: hidden;
+			-webkit-user-select:none;
+			user-select: none;
+		}
+		#chrome {
+			width: 220px;
+			height: 20px;
+			background-color: rgba(70,70,70,0.9);
+			-webkit-app-region: drag;
+			border-radius: 3px 3px 0 0;
+		}
+		#x {
+			width: 30px;
+			height: 20px;
+			position: fixed;
+			top: 0;
+			right: 0;
+			color: white;
+			background-color: #D31717;
+			opacity: 0.75;
+			transition: opacity 0.3s;
+			text-align: center;
+			font-size: 11pt;
+			-webkit-user-select:none;
+			-webkit-app-region: no-drag;
+			cursor: pointer;
+			border-radius: 0 3px 0 0;
+		}
+		#timer {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			height: 60px;
+			position: fixed;
+			top: 20px;
+			left: 0;
+			width: 100%;
+			color: white;
+			font-weight: bold;
+			font-size: 40pt;
+			background-color: rgba(40,40,40,0.9);
+			border-radius: 0 0 3px 3px;
+			font-family: Segoe UI;
+		}
+		#hours::after, #minutes::after {
+			content: ":";
+			position: absolute;
+			color: white;
+			font-weight: bold;
+			font-size: 40pt;
+			top: -8px; 
+		}
+		#hours, #minutes {
+			margin-right: 15px; 
+		}
+		#start, #stop{
+			position: fixed;
+			height: 20px;
+			width: 50px;
+			cursor: pointer;
+			-webkit-user-select:none;
+			-webkit-app-region: no-drag;
+			text-align: center;
+			color: white;
+			font-family: Segoe UI;
+			line-height: 20px;
+		}
+		#stop {
+			left: 50px;
+			background-color: #C01C1C;
+			opacity: 0.9;
+		}
+		#start {
+			left: 0;
+			background-color: #278118;
+			opacity: 0.9;
+			border-radius: 3px 0 0 0;
+		}
+	</style>
+	<style type="text/css" src="style.css"></style>
+</head>
+<body>
+<div id="chrome">
+	<div id="x">✕</div>
+	<div id="start">Start</div>
+	<div id="stop">Stop</div>
+</div>
+<div id="timer">
+	<div id="hours">02</div>
+	<div id="minutes">00</div>
+	<div id="seconds">00</div>
+</div>
+<script type="text/javascript">
+	const remote = require("electron").remote;
+	document.getElementById('x').addEventListener("click", function(){
+		remote.getCurrentWindow().close();
+	});
+
+	var interval = null;
+	document.getElementById('start').addEventListener("click", function(){
+		if (interval===null) {
+			interval = setInterval(clock, 1000);
+		}
+	});
+	document.getElementById('stop').addEventListener("click", function(){
+		if (interval) {
+			clearInterval(interval);
+			interval=null;
+		}
+	});
+	var hDiv = document.getElementById("hours");
+	var mDiv = document.getElementById("minutes");
+	var sDiv = document.getElementById("seconds");
+	var hours = 2;
+	var minutes = 0;
+	var seconds = 0;
+	function clock() {
+		if (seconds===0) {
+			seconds=59;
+			if (minutes===0) {
+				minutes=59;
+				hours--;
+			} else {
+				minutes--
+			}
+		} else {
+			seconds--;
+		}
+		if (hours<10) {
+			hDiv.innerHTML="0"+hours;
+		}
+		if (minutes<10) {
+			mDiv.innerHTML="0"+minutes;
+		}
+		if (seconds<10) {
+			sDiv.innerHTML="0"+seconds;
+		}
+		if (hours>9) {
+			hDiv.innerHTML=hours;
+		}
+		if (minutes>9) {
+			mDiv.innerHTML=minutes;
+		}
+		if (seconds>9) {
+			sDiv.innerHTML=seconds;
+		}
+	}
+</script>
+</body>
+</html>
+<!--https://www.youtube.com/embed/LAn0OUUxY8s-->
